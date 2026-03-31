@@ -6,7 +6,13 @@ st.set_page_config(page_title="Movie Recommender", layout="wide")
 
 # Load data
 new_df = pickle.load(open('movies.pkl', 'rb'))
-similarity = pickle.load(open('similarity.pkl', 'rb'))
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+
+cv = CountVectorizer(max_features=5000, stop_words='english')
+vectors = cv.fit_transform(new_df['tags']).toarray()
+
+similarity = cosine_similarity(vectors)
 
 # Recommendation function
 def recommend(movie):
